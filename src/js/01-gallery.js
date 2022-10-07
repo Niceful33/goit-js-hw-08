@@ -11,21 +11,21 @@ const galleryContainer = document.querySelector('.gallery');
 const galleryMarkup = galleryItems.reduce(
   (acc, item) =>
     acc +
-    `<li><a class="gallery__item" href="${item.original}">
+    `<a class="gallery__link" href="${item.original}">
   <img class="gallery__image" src="${item.preview}" alt="${item.description}" />
-</a></li>`,
+</a>`,
   ''
 );
 galleryContainer.insertAdjacentHTML('beforeend', galleryMarkup);
 
-galleryContainer.addEventListener('click', onClick);
-function onClick(evt) {
-  evt.preventDefault;
-  if (evt.target.nodeName !== 'IMG') {
-    return;
-  }
-}
-const lightbox = new SimpleLightbox('.gallery__item', {
+// galleryContainer.addEventListener('click', onClick);
+// function onClick(evt) {
+//   evt.preventDefault;
+//   if (evt.target.nodeName !== 'IMG') {
+//     return;
+//   }
+// }
+const lightbox = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
   captionDelay: 250,
 });
