@@ -6,6 +6,8 @@ const form = document.querySelector('.feedback-form');
 const email = document.querySelector('input');
 const message = document.querySelector('textarea');
 
+const dataSave = localStorage.getItem('feedback-form-state');
+const dataParse = JSON.parse(dataSave);
 let formData = {};
 
 form.addEventListener('submit', onFormSubmit);
@@ -16,8 +18,6 @@ function onTextInput(evt) {
   formData = { email: email.value, message: message.value };
   localStorage.setItem('feedback-form-state', JSON.stringify(formData));
 }
-const dataSave = localStorage.getItem('feedback-form-state');
-const dataParse = JSON.parse(dataSave);
 
 function getStorageForm() {
   if (dataSave) {
