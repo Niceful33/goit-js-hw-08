@@ -1,37 +1,39 @@
 import throttle from 'lodash.throttle';
 
-const STORAGE_KEY = 'feedback-form-state';
-const refs = {
-  form: document.querySelector('form'),
-  email: document.querySelector('input'),
-  message: document.querySelector('textarea'),
-};
+// const STORAGE_KEY = 'feedback-form-state';
 
-getStorage();
+const form = document.querySelector('.feedback-form');
+const email = document.querySelector('input');
+const message = document.querySelector('textarea');
 
-refs.form.addEventListener('submit', onFormSubmit);
-refs.form.addEventListener('input', throttle(onTextInput, 500));
+let formData = {};
+
+form.addEventListener('submit', onFormSubmit);
+form.addEventListener('input', throttle(onTextInput, 500));
+getStorageForm();
+
+function onTextInput(evt) {
+  formData = { email: email.value, message: message.value };
+  localStorage.setItem('feedback-form-state', JSON.stringify(formData));
+}
+const dataSave = localStorage.getItem('feedback-form-state');
+const dataParse = JSON.parse(dataSave);
+
+function getStorageForm() {
+  if (dataSave) {
+    email.value = dataParse.email;
+    message.value = dataParse.message;
+  }
+}
 
 function onFormSubmit(evt) {
   evt.preventDefault();
+  if (email.value.trim() === '' || message.value.trim() === '') {
+    alert('Please, fill all fields');
+    return;
+  }
+  console.log(dataParse);
+
   evt.currentTarget.reset();
-  console.log(JSON.parse(localStorage.getItem(STORAGE_KEY)));
-  localStorage.removeItem(STORAGE_KEY);
-}
-
-const dataForm = {};
-
-function onTextInput(event) {
-  const name = event.target.name;
-  const data = event.target.value;
-  dataForm[name] = data;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(dataForm));
-}
-
-function getStorage() {
-  const storageMessage = JSON.parse(localStorage.getItem(STORAGE_KEY));
-
-  if (!storageMessage) return;
-  if (storageMessage.email) refs.email.value = storageMessage.email;
-  if (storageMessage.message) refs.message.value = storageMessage.message;
+  localStorage.removeItem('feedback-form-state');
 }
